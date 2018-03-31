@@ -29,8 +29,8 @@ public class Ad implements Serializable {
     private String query;
     private String category;
 
-    public Ad(Long adId, Long campaignId, List<String> keywords, String title, double price,
-              String thumbnail, String description, String brand, String detailUrl, String query) {
+    public Ad(Long adId, Long campaignId, List<String> keywords, String title, double price, String thumbnail,
+              String description, String brand, String detailUrl, String category, double bidPrice, double pClick) {
         this.adId = adId;
         this.campaignId = campaignId;
         this.keywords = keywords;
@@ -40,7 +40,9 @@ public class Ad implements Serializable {
         this.description = description;
         this.brand = brand;
         this.detailUrl = detailUrl;
-        this.query = query;
+        this.category = category;
+        this.bidPrice = bidPrice;
+        this.pClick = pClick;
     }
 
     public static long getSerialVersionUID() {

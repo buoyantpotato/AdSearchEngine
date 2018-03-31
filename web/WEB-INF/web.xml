@@ -6,12 +6,49 @@
 
     <context-param>
         <param-name>adsDataFilePath</param-name>
-        <param-value>/Users/jiayangan/project/SearchAds/data/deduped/ads7.txt</param-value>
+        <param-value>./data/ads.txt</param-value>
     </context-param>
+
+    <context-param>
+        <param-name>campaignDataFilePath</param-name>
+        <param-value>./data/campaigns.txt</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>invertedIndexServer</param-name>
+        <param-value>http://localhost</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>invertedIndexServerPort</param-name>
+        <param-value>11211</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mysqlDatabaseHost</param-name>
+        <param-value>jdbc:mysql://localhost:3306</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mysqlDatabaseName</param-name>
+        <param-value>AdSearchDB</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mysqlUser</param-name>
+        <param-value>root</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>mysqlPassword</param-name>
+        <param-value> </param-value>
+    </context-param>
+
 
     <servlet>
         <servlet-name>AdSearch</servlet-name>
-        <servlet-class>com.adsearch.AdSearch</servlet-class>
+        <servlet-class>com.adsearch.AdSearchServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdSearch</servlet-name>
