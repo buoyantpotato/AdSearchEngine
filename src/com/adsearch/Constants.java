@@ -15,5 +15,7 @@ public class Constants {
     public static final String JSON_AD_CATEGORY = "category";
     public static final String JSON_AD_BID_PRICE = "bidPrice";
     public static final String JSON_AD_PCLICK = "pClick";
+
+    public static final String QUERY_DELIMITER = ",";
     
 }

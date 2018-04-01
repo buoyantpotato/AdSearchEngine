@@ -13,61 +13,62 @@ public class MemcachedManager {
 
     private String memcachedServerHost;
     private int memcachedPort;
+    private MemcachedClient memcachedClient = null;
 
     public MemcachedManager(String memcachedServerHost, int memcachedPort) {
         this.memcachedServerHost = memcachedServerHost;
         this.memcachedPort = memcachedPort;
     }
 
-    public void addData(String key, String val) {
-        try {
-            MemcachedClient cache = new MemcachedClient(new InetSocketAddress(memcachedServerHost, memcachedPort));
-            cache.add(key, EXP_TIME, val);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private MemcachedClient getClient() throws IOException {
+        System.out.println("INFO: The system is claiming a new memcached client for indexing...");
+        return new MemcachedClient(new InetSocketAddress(memcachedServerHost, memcachedPort));
     }
 
-    public String getStringData(String key) {
+    public boolean addIdToSet(String key, Long val) {
         try {
-            MemcachedClient cache = new MemcachedClient(new InetSocketAddress(memcachedServerHost, memcachedPort));
-            Object val = cache.get(key);
-            if (val instanceof String) {
-                return (String) val;
+            if (this.memcachedClient == null) {
+                this.memcachedClient = getClient();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        return "";
-    }
-
-    public void addListOfStringData(String key, String val) {
-        try {
-            MemcachedClient cache = new MemcachedClient(new InetSocketAddress(memcachedServerHost, memcachedPort));
-            Object list = cache.get(key);
+            Object list = this.memcachedClient.get(key);
+            boolean res = false;
             if (list instanceof Set) {
-                ((Set) list).add(val);
-                cache.set(key, EXP_TIME, list);
+                res = ((Set<Long>) list).add(val);
+                this.memcachedClient.set(key, EXP_TIME, list);
             } else {
-                list = new HashSet<String>();
-                ((Set) list).add(val);
-                cache.set(key, EXP_TIME, list);
+                list = new HashSet<Long>();
+                res = ((Set<Long>) list).add(val);
+                this.memcachedClient.set(key, EXP_TIME, list);
+            }
+
+            if (res) {
+                System.out.println("Cache is added to Memcached: " + key + " <- " + val);
+            } else {
+                System.out.println("Cache already exited: " + key + " <- " + val);
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("ERROR: Problems in MemcachedManager.addIdToSet()");
+            return false;
         }
+
+        return true;
     }
 
-    public HashSet<String> getListOfStringData(String key) {
+    public Set<Long> getIdListByToken(String key) {
         try {
-            MemcachedClient cache = new MemcachedClient(new InetSocketAddress(memcachedServerHost, memcachedPort));
-            Object list = cache.get(key);
+            if (this.memcachedClient == null) {
+                this.memcachedClient = getClient();
+            }
+
+            Object list = this.memcachedClient.get(key);
             if (list instanceof Set) {
-                return (HashSet<String>) list;
+                return (Set<Long>) list;
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("ERROR: Problems in MemcachedManager.getIdListByToken()");
         }
 
         return null;

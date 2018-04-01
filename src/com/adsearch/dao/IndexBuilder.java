@@ -1,10 +1,13 @@
 package com.adsearch.dao;
 
 import com.adsearch.Constants;
+import com.adsearch.QueryParser;
+import com.adsearch.Utility;
 import com.adsearch.model.Ad;
 import com.adsearch.model.Campaign;
 
 import java.sql.*;
+import java.util.List;
 
 public class IndexBuilder {
 
@@ -40,6 +43,17 @@ public class IndexBuilder {
     }
 
     public boolean insertAdToInvertedIndex(Ad ad) {
-        return false;
+        boolean res = true;
+
+        String keywords = Utility.joinStrings(ad.getKeywords(), Constants.QUERY_DELIMITER);
+        List<String> cleanedTokens = QueryParser.getInstance().QueryUnderstand(keywords);
+
+        for (String token : cleanedTokens) {
+            if (!this.invertedIndexBuilder.addIdToSet(token, ad.getAdId())) {
+                res = false;
+            }
+        }
+
+        return res;
     }
 }

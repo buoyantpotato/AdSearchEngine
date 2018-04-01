@@ -42,7 +42,7 @@ public class AdEngine {
                 JSONObject item = new JSONObject(line);
 
                 List<String> kewords = new ArrayList<>();
-                if (item.isNull(Constants.JSON_AD_KEYWORDS)) {
+                if (!item.isNull(Constants.JSON_AD_KEYWORDS)) {
                     JSONArray keywordArray = item.getJSONArray(Constants.JSON_AD_KEYWORDS);
                     for (int i = 0; i < keywordArray.length(); i++) {
                         kewords.add(keywordArray.getString(i));

@@ -2,6 +2,16 @@ package com.adsearch;
 
 import java.util.List;
 
+import org.apache.lucene.analysis.core.StopFilter;
+import org.apache.lucene.analysis.standard.StandardFilter;
+import org.apache.lucene.analysis.en.KStemFilter;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.util.Version;
+import org.apache.lucene.analysis.util.CharArraySet;
+
 public class Utility {
 
     public static String joinStrings(List<String> list, String delimiter) {
